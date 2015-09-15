@@ -1,0 +1,437 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Html-proofer by Tiger66639</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/Tiger66639/html-proofer">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/Tiger66639/html-proofer/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/Tiger66639/html-proofer/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Html-proofer</h1>
+          <p>Test your rendered HTML files to make sure they&#39;re accurate.</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/Tiger66639">Tiger66639</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a id="htmlproofer" class="anchor" href="#htmlproofer" aria-hidden="true"><span class="octicon octicon-link"></span></a>HTML::Proofer</h1>
+
+<p><a href="https://travis-ci.org/Tiger66639/html-proofer"><img src="https://travis-ci.org/Tiger66639/html-proofer.svg" alt="Build Status"></a>
+If you generate HTML files, <em>then this tool might be for you</em>.</p>
+
+<p><code>HTML::Proofer</code> is a set of tests to validate your HTML output. These tests check if your image references are legitimate, if they have alt tags, if your internal links are working, and so on. It's intended to be an all-in-one checker for your output.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Add this line to your application's Gemfile:</p>
+
+<pre><code>gem 'html-proofer'
+</code></pre>
+
+<p>And then execute:</p>
+
+<pre><code>$ bundle
+</code></pre>
+
+<p>Or install it yourself as:</p>
+
+<pre><code>$ gem install html-proofer
+</code></pre>
+
+<p><strong>NOTE:</strong> When installation speed matters, set <code>NOKOGIRI_USE_SYSTEM_LIBRARIES</code> to <code>true</code> in your environment. This is useful for increasing the speed of your Continuous Integration builds.</p>
+
+<h2>
+<a id="whats-tested" class="anchor" href="#whats-tested" aria-hidden="true"><span class="octicon octicon-link"></span></a>What's Tested?</h2>
+
+<p>You can enable or disable most of the following checks.</p>
+
+<h3>
+<a id="images" class="anchor" href="#images" aria-hidden="true"><span class="octicon octicon-link"></span></a>Images</h3>
+
+<p><code>img</code> elements:</p>
+
+<ul>
+<li>Whether all your images have alt tags</li>
+<li>Whether your internal image references are not broken</li>
+<li>Whether external images are showing</li>
+</ul>
+
+<h3>
+<a id="links" class="anchor" href="#links" aria-hidden="true"><span class="octicon octicon-link"></span></a>Links</h3>
+
+<p><code>a</code>, <code>link</code> elements:</p>
+
+<ul>
+<li>Whether your internal links are working</li>
+<li>Whether your internal hash references (<code>#linkToMe</code>) are working</li>
+<li>Whether external links are working</li>
+</ul>
+
+<h3>
+<a id="scripts" class="anchor" href="#scripts" aria-hidden="true"><span class="octicon octicon-link"></span></a>Scripts</h3>
+
+<p><code>script</code> elements:</p>
+
+<ul>
+<li>Whether your internal script references are working</li>
+<li>Whether external scripts are loading</li>
+</ul>
+
+<h3>
+<a id="favicon" class="anchor" href="#favicon" aria-hidden="true"><span class="octicon octicon-link"></span></a>Favicon</h3>
+
+<ul>
+<li>Whether your favicons are valid.</li>
+</ul>
+
+<h3>
+<a id="html" class="anchor" href="#html" aria-hidden="true"><span class="octicon octicon-link"></span></a>HTML</h3>
+
+<ul>
+<li>Whether your HTML markup is valid. This is done via <a href="http://www.nokogiri.org/tutorials/ensuring_well_formed_markup.html">Nokogiri, to ensure well-formed markup</a>.</li>
+</ul>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<h3>
+<a id="using-in-a-script" class="anchor" href="#using-in-a-script" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using in a script</h3>
+
+<p>Require the gem; generate some HTML; create a new instance of the <code>HTML::Proofer</code> on
+your output folder; then <code>run</code> it. Here's a simple example:</p>
+
+<div class="highlight highlight-source-ruby"><pre><span class="pl-k">require</span> <span class="pl-s"><span class="pl-pds">'</span>html/proofer<span class="pl-pds">'</span></span>
+<span class="pl-k">require</span> <span class="pl-s"><span class="pl-pds">'</span>html/pipeline<span class="pl-pds">'</span></span>
+<span class="pl-k">require</span> <span class="pl-s"><span class="pl-pds">'</span>find<span class="pl-pds">'</span></span>
+
+<span class="pl-c"># make an out dir</span>
+<span class="pl-c1">Dir</span>.mkdir(<span class="pl-s"><span class="pl-pds">"</span>out<span class="pl-pds">"</span></span>) <span class="pl-k">unless</span> <span class="pl-c1">File</span>.exist?(<span class="pl-s"><span class="pl-pds">"</span>out<span class="pl-pds">"</span></span>)
+
+pipeline <span class="pl-k">=</span> <span class="pl-c1">HTML</span>::<span class="pl-c1">Pipeline</span>.<span class="pl-k">new</span> [
+  <span class="pl-c1">HTML</span>::<span class="pl-c1">Pipeline</span>::<span class="pl-c1">MarkdownFilter</span>,
+  <span class="pl-c1">HTML</span>::<span class="pl-c1">Pipeline</span>::<span class="pl-c1">TableOfContentsFilter</span>
+], <span class="pl-c1">:gfm</span> =&gt; <span class="pl-c1">true</span>
+
+<span class="pl-c"># iterate over files, and generate HTML from Markdown</span>
+<span class="pl-c1">Find</span>.find(<span class="pl-s"><span class="pl-pds">"</span>./docs<span class="pl-pds">"</span></span>) <span class="pl-k">do </span>|<span class="pl-smi">path</span>|
+  <span class="pl-k">if</span> <span class="pl-c1">File</span>.extname(path) <span class="pl-k">==</span> <span class="pl-s"><span class="pl-pds">"</span>.md<span class="pl-pds">"</span></span>
+    contents <span class="pl-k">=</span> <span class="pl-c1">File</span>.read(path)
+    result <span class="pl-k">=</span> pipeline.call(contents)
+
+    <span class="pl-c1">File</span>.open(<span class="pl-s"><span class="pl-pds">"</span>out/<span class="pl-pse">#{</span><span class="pl-s1">path.split(<span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span>).pop.sub(<span class="pl-s"><span class="pl-pds">'</span>.md<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>.html<span class="pl-pds">'</span></span>)</span><span class="pl-pse"><span class="pl-s1">}</span></span><span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">'</span>w<span class="pl-pds">'</span></span>) { |<span class="pl-smi">file</span>| file.write(result[<span class="pl-c1">:output</span>].to_s) }
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+<span class="pl-c"># test your out dir!</span>
+<span class="pl-c1">HTML</span>::<span class="pl-c1">Proofer</span>.<span class="pl-k">new</span>(<span class="pl-s"><span class="pl-pds">"</span>./out<span class="pl-pds">"</span></span>).run</pre></div>
+
+<h3>
+<a id="using-on-the-command-line" class="anchor" href="#using-on-the-command-line" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using on the command-line</h3>
+
+<p>You'll get a new program called <code>htmlproof</code> with this gem. Terrific!</p>
+
+<p>Use it like you'd expect to:</p>
+
+<div class="highlight highlight-source-shell"><pre>htmlproof ./out --href-swap wow:cow,mow:doh --ext .html.erb --href-ignore www.github.com</pre></div>
+
+<p>Note: since <code>href_swap</code> is a bit special, you'll pass in a pair of <code>RegEx:String</code> values.
+<code>htmlproof</code> will figure out what you mean.</p>
+
+<h3>
+<a id="using-with-jekyll" class="anchor" href="#using-with-jekyll" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using with Jekyll</h3>
+
+<p>Want to use HTML Proofer with your Jekyll site? Awesome. Simply add <code>gem 'html-proofer'</code>
+to your <code>Gemfile</code> as described above, and add the following to your <code>Rakefile</code>,
+using <code>rake test</code> to execute:</p>
+
+<div class="highlight highlight-source-ruby"><pre><span class="pl-k">require</span> <span class="pl-s"><span class="pl-pds">'</span>html/proofer<span class="pl-pds">'</span></span>
+
+task <span class="pl-c1">:test</span> <span class="pl-k">do</span>
+  sh <span class="pl-s"><span class="pl-pds">"</span>bundle exec jekyll build<span class="pl-pds">"</span></span>
+  <span class="pl-c1">HTML</span>::<span class="pl-c1">Proofer</span>.<span class="pl-k">new</span>(<span class="pl-s"><span class="pl-pds">"</span>./_site<span class="pl-pds">"</span></span>).run
+<span class="pl-k">end</span></pre></div>
+
+<p>Don't have or want a <code>Rakefile</code>? You can also do something like the following:</p>
+
+<div class="highlight highlight-source-shell"><pre>htmlproof ./_site</pre></div>
+
+<h3>
+<a id="array-of-links" class="anchor" href="#array-of-links" aria-hidden="true"><span class="octicon octicon-link"></span></a>Array of links</h3>
+
+<p>Instead of a directory as the first argument, you can also pass in an array of links:</p>
+
+<div class="highlight highlight-source-ruby"><pre><span class="pl-c1">HTML</span>::<span class="pl-c1">Proofer</span>.<span class="pl-k">new</span>([<span class="pl-s"><span class="pl-pds">"</span>http://github.com<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>http://jekyllrb.com<span class="pl-pds">"</span></span>])</pre></div>
+
+<p>This configures Proofer to just test those links to ensure they are valid. Note that for the command-line, you'll need to pass a special <code>--as-links</code> argument:</p>
+
+<div class="highlight highlight-source-shell"><pre>htmlproof www.google.com,www.github.com --as-links</pre></div>
+
+<h2>
+<a id="ignoring-content" class="anchor" href="#ignoring-content" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ignoring content</h2>
+
+<p>Add the <code>data-proofer-ignore</code> attribute to any tag to ignore it from every check.</p>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>http://notareallink<span class="pl-pds">"</span></span> <span class="pl-e">data-proofer-ignore</span>&gt;Not checked.&lt;/<span class="pl-ent">a</span>&gt;</pre></div>
+
+<h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>The <code>HTML::Proofer</code> constructor takes an optional hash of additional options:</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">Option</th>
+<th align="left">Description</th>
+<th align="left">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>alt_ignore</code></td>
+<td align="left">An array of Strings or RegExps containing <code>img</code>s whose missing <code>alt</code> tags are safe to ignore.</td>
+<td align="left"><code>[]</code></td>
+</tr>
+<tr>
+<td align="left"><code>empty_alt_ignore</code></td>
+<td align="left">If <code>true</code>, ignores images with empty alt tags.</td>
+<td align="left"><code>false</code></td>
+</tr>
+<tr>
+<td align="left"><code>check_external_hash</code></td>
+<td align="left">Checks whether external hashes exist (even if the website exists). This slows the checker down.</td>
+<td align="left"><code>false</code></td>
+</tr>
+<tr>
+<td align="left"><code>check_favicon</code></td>
+<td align="left">Enables the favicon checker.</td>
+<td align="left"><code>false</code></td>
+</tr>
+<tr>
+<td align="left"><code>check_html</code></td>
+<td align="left">Enables HTML validation errors from Nokogiri</td>
+<td align="left"><code>false</code></td>
+</tr>
+<tr>
+<td align="left"><code>checks_to_ignore</code></td>
+<td align="left">An array of Strings indicating which checks you'd like to not perform.</td>
+<td align="left"><code>[]</code></td>
+</tr>
+<tr>
+<td align="left"><code>directory_index_file</code></td>
+<td align="left">Sets the file to look for when a link refers to a directory.</td>
+<td align="left"><code>index.html</code></td>
+</tr>
+<tr>
+<td align="left"><code>disable_external</code></td>
+<td align="left">If <code>true</code>, does not run the external link checker, which can take a lot of time.</td>
+<td align="left"><code>false</code></td>
+</tr>
+<tr>
+<td align="left"><code>error_sort</code></td>
+<td align="left">Defines the sort order for error output. Can be <code>:path</code>, <code>:desc</code>, or <code>:status</code>.</td>
+<td align="left"><code>:path</code></td>
+</tr>
+<tr>
+<td align="left"><code>ext</code></td>
+<td align="left">The extension of your HTML files including the dot.</td>
+<td align="left"><code>.html</code></td>
+</tr>
+<tr>
+<td align="left"><code>file_ignore</code></td>
+<td align="left">An array of Strings or RegExps containing file paths that are safe to ignore.</td>
+<td align="left"><code>[]</code></td>
+</tr>
+<tr>
+<td align="left"><code>href_ignore</code></td>
+<td align="left">An array of Strings or RegExps containing <code>href</code>s that are safe to ignore. Note that non-HTTP(S) URIs are always ignored. <strong>Will be renamed in a future release.</strong>
+</td>
+<td align="left"><code>[]</code></td>
+</tr>
+<tr>
+<td align="left"><code>href_swap</code></td>
+<td align="left">A hash containing key-value pairs of <code>RegExp =&gt; String</code>. It transforms links that match <code>RegExp</code> into <code>String</code> via <code>gsub</code>. <strong>Will be renamed in a future release.</strong>
+</td>
+<td align="left"><code>{}</code></td>
+</tr>
+<tr>
+<td align="left"><code>ignore_script_embeds</code></td>
+<td align="left">When <code>check_html</code> is enabled, <code>script</code> tags containing markup <a href="http://git.io/vOovv">are reported as errors</a>. Enabling this option ignores those errors.</td>
+<td align="left"><code>false</code></td>
+</tr>
+<tr>
+<td align="left"><code>only_4xx</code></td>
+<td align="left">Only reports errors for links that fall within the 4xx status code range.</td>
+<td align="left"><code>false</code></td>
+</tr>
+<tr>
+<td align="left"><code>url_ignore</code></td>
+<td align="left">An array of Strings or RegExps containing URLs that are safe to ignore. It affects all HTML attributes. Note that non-HTTP(S) URIs are always ignored.</td>
+<td align="left"><code>[]</code></td>
+</tr>
+<tr>
+<td align="left"><code>verbose</code></td>
+<td align="left">If <code>true</code>, outputs extra information as the checking happens. Useful for debugging. <strong>Will be deprecated in a future release.</strong>
+</td>
+<td align="left"><code>false</code></td>
+</tr>
+<tr>
+<td align="left"><code>verbosity</code></td>
+<td align="left">Sets the logging level, as determined by <a href="https://github.com/rudionrails/yell">Yell</a>.</td>
+<td align="left"><code>:info</code></td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="configuring-typhoeus-and-hydra" class="anchor" href="#configuring-typhoeus-and-hydra" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuring Typhoeus and Hydra</h3>
+
+<p><a href="https://github.com/typhoeus/typhoeus">Typhoeus</a> is used to make fast, parallel requests to external URLs. You can pass in any of Typhoeus' options for the external link checks with the options namespace of <code>:typhoeus</code>. For example:</p>
+
+<div class="highlight highlight-source-ruby"><pre><span class="pl-c1">HTML</span>::<span class="pl-c1">Proofer</span>.<span class="pl-k">new</span>(<span class="pl-s"><span class="pl-pds">"</span>out/<span class="pl-pds">"</span></span>, {<span class="pl-c1">:ext</span> =&gt; <span class="pl-s"><span class="pl-pds">"</span>.htm<span class="pl-pds">"</span></span>, <span class="pl-c1">:typhoeus</span> =&gt; { <span class="pl-c1">:verbose</span> =&gt; <span class="pl-c1">true</span>, <span class="pl-c1">:ssl_verifyhost</span> =&gt; <span class="pl-c1">2</span> } })</pre></div>
+
+<p>This sets <code>HTML::Proofer</code>'s extensions to use <em>.htm</em>, gives Typhoeus a configuration for it to be verbose, and use specific SSL settings. Check <a href="https://github.com/typhoeus/typhoeus#other-curl-options">the Typhoeus documentation</a> for more information on what options it can receive.</p>
+
+<p>You can similarly pass in a <code>:hydra</code> option with a hash configuration for Hydra.</p>
+
+<p>The default value is <code>typhoeus =&gt; { :followlocation =&gt; true }</code>.</p>
+
+<h3>
+<a id="configuring-parallel" class="anchor" href="#configuring-parallel" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuring Parallel</h3>
+
+<p><a href="https://github.com/grosser/parallel">Parallel</a> is used to speed internal file checks. You can pass in any of its options with the options namespace <code>:parallel</code>. For example:</p>
+
+<div class="highlight highlight-source-ruby"><pre><span class="pl-c1">HTML</span>::<span class="pl-c1">Proofer</span>.<span class="pl-k">new</span>(<span class="pl-s"><span class="pl-pds">"</span>out/<span class="pl-pds">"</span></span>, {<span class="pl-c1">:ext</span> =&gt; <span class="pl-s"><span class="pl-pds">"</span>.htm<span class="pl-pds">"</span></span>, <span class="pl-c1">:parallel</span> =&gt; { <span class="pl-c1">:in_processes</span> =&gt; <span class="pl-c1">3</span>} })</pre></div>
+
+<p>In this example, <code>:in_processes =&gt; 3</code> is passed into Parallel as a configuration option.</p>
+
+<h2>
+<a id="logging" class="anchor" href="#logging" aria-hidden="true"><span class="octicon octicon-link"></span></a>Logging</h2>
+
+<p>HTML-Proofer can be as noisy or as quiet as you'd like. There are two ways to log information:</p>
+
+<ul>
+<li>If you set the <code>:verbose</code> option to <code>true</code>, HTML-Proofer will provide some debug information.</li>
+<li>If you set the <code>:verbosity</code> option, you can better define the level of logging. See the configuration table above for more information.</li>
+</ul>
+
+<p><code>:verbosity</code> is newer and offers better configuration. <code>:verbose</code> will be deprecated in a future 3.x.x release.</p>
+
+<h2>
+<a id="custom-tests" class="anchor" href="#custom-tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Custom tests</h2>
+
+<p>Want to write your own test? Sure! Just create two classes--one that inherits from <code>HTML::Proofer::Checkable</code>, and another that inherits from <code>HTML::Proofer::CheckRunner</code>.</p>
+
+<p>The <code>CheckRunner</code> subclass must define one method called <code>run</code>. This is called on your content, and is responsible for performing the validation on whatever elements you like. When you catch a broken issue, call <code>add_issue(message)</code> to explain the error.</p>
+
+<p>The <code>Checkable</code> subclass defines various helper methods you can use as part of your test. Usually, you'll want to instantiate it within <code>run</code>. You have access to all of your element's attributes.</p>
+
+<p>Here's an example custom test that protects against <code>mailto</code> links that point to <code>octocat@github.com</code>:</p>
+
+<div class="highlight highlight-source-ruby"><pre><span class="pl-k">class</span> <span class="pl-en">OctocatLinkCheck<span class="pl-e"> &lt; ::HTML::Proofer::Checkable</span></span>
+  <span class="pl-k">def</span> <span class="pl-en">mailto?</span>
+    <span class="pl-k">return</span> <span class="pl-c1">false</span> <span class="pl-k">if</span> <span class="pl-smi">@data_ignore_proofer</span> <span class="pl-k">||</span> <span class="pl-smi">@href</span>.nil? <span class="pl-k">||</span> <span class="pl-smi">@href</span>.empty?
+    <span class="pl-k">return</span> <span class="pl-smi">@href</span>.match <span class="pl-sr"><span class="pl-pds">/</span>^mailto<span class="pl-cce">\:</span><span class="pl-pds">/</span></span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-k">def</span> <span class="pl-en">octocat?</span>
+    <span class="pl-k">return</span> <span class="pl-smi">@href</span>.match <span class="pl-sr"><span class="pl-pds">/</span><span class="pl-cce">\:</span>octocat@github.com<span class="pl-cce">\Z</span><span class="pl-pds">/</span></span>
+  <span class="pl-k">end</span>
+
+<span class="pl-k">end</span>
+
+<span class="pl-k">class</span> <span class="pl-en">MailToOctocat<span class="pl-e"> &lt; ::HTML::Proofer::CheckRunner</span></span>
+  <span class="pl-k">def</span> <span class="pl-en">run</span>
+    <span class="pl-smi">@html</span>.css(<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>).each <span class="pl-k">do </span>|<span class="pl-smi">node</span>|
+      link <span class="pl-k">=</span> <span class="pl-c1">OctocatLinkCheck</span>.<span class="pl-k">new</span>(node, <span class="pl-v">self</span>)
+      line <span class="pl-k">=</span> node.line
+
+      <span class="pl-k">if</span> link.mailto? <span class="pl-k">&amp;&amp;</span> link.octocat?
+        <span class="pl-k">return</span> add_issue(<span class="pl-s"><span class="pl-pds">"</span>Don't email the Octocat directly!<span class="pl-pds">"</span></span>, line)
+      <span class="pl-k">end</span>
+    <span class="pl-k">end</span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span></pre></div>
+
+<h2>
+<a id="troubleshooting" class="anchor" href="#troubleshooting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Troubleshooting</h2>
+
+<h3>
+<a id="certificates" class="anchor" href="#certificates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Certificates</h3>
+
+<p>To ignore certificates, turn off Typhoeus' SSL verification:</p>
+
+<div class="highlight highlight-source-ruby"><pre><span class="pl-c1">HTML</span>::<span class="pl-c1">Proofer</span>.<span class="pl-k">new</span>(<span class="pl-s"><span class="pl-pds">"</span>out/<span class="pl-pds">"</span></span>, {
+  <span class="pl-c1">:typhoeus</span> =&gt; {
+    <span class="pl-c1">:ssl_verifypeer</span> =&gt; <span class="pl-c1">false</span>,
+    <span class="pl-c1">:ssl_verifyhost</span> =&gt; <span class="pl-c1">0</span>}
+}).run</pre></div>
+
+<h3>
+<a id="user-agent" class="anchor" href="#user-agent" aria-hidden="true"><span class="octicon octicon-link"></span></a>User-Agent</h3>
+
+<p>To change the User-Agent used by Typhoeus:</p>
+
+<div class="highlight highlight-source-ruby"><pre><span class="pl-c1">HTML</span>::<span class="pl-c1">Proofer</span>.<span class="pl-k">new</span>(<span class="pl-s"><span class="pl-pds">"</span>out/<span class="pl-pds">"</span></span>, {
+  <span class="pl-c1">:typhoeus</span> =&gt; {
+    <span class="pl-c1">:headers</span> =&gt; { <span class="pl-s"><span class="pl-pds">"</span>User-Agent<span class="pl-pds">"</span></span> =&gt; <span class="pl-s"><span class="pl-pds">"</span>Mozilla/5.0 (compatible; My New User-Agent)<span class="pl-pds">"</span></span> }
+}}).run</pre></div>
+
+<h2>
+<a id="real-life-examples" class="anchor" href="#real-life-examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Real-life examples</h2>
+
+<table>
+<thead>
+<tr>
+<th align="left">Project</th>
+<th align="left">Repository</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><a href="http://www.raspberrypi.org/documentation/">Raspberry Pi documentation</a></td>
+<td align="left"><a href="https://github.com/raspberrypi/documentation">raspberrypi/documentation</a></td>
+</tr>
+<tr>
+<td align="left"><a href="https://whispersystems.org/">Open Whisper Systems website</a></td>
+<td align="left"><a href="https://github.com/WhisperSystems/whispersystems.org">WhisperSystems/whispersystems.org</a></td>
+</tr>
+<tr>
+<td align="left"><a href="http://jekyllrb.com/">Jekyll website</a></td>
+<td align="left"><a href="https://github.com/jekyll/jekyll">jekyll/jekyll</a></td>
+</tr>
+</tbody>
+</table>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
