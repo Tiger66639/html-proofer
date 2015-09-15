@@ -1,5 +1,5 @@
 # HTML::Proofer
-
+[![Build Status](https://travis-ci.org/Tiger66639/html-proofer.svg)](https://travis-ci.org/Tiger66639/html-proofer)
 If you generate HTML files, _then this tool might be for you_.
 
 `HTML::Proofer` is a set of tests to validate your HTML output. These tests check if your image references are legitimate, if they have alt tags, if your internal links are working, and so on. It's intended to be an all-in-one checker for your output.
